@@ -1,5 +1,6 @@
 "use client";
 
+import { Award, Calculator, Pencil, Save, Trash2, X } from "lucide-react";
 import { type ReactNode, useMemo, useState } from "react";
 import {
   COURSE_TYPES,
@@ -145,7 +146,8 @@ export default function App() {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* ── Kiri: Input ─────────────────────────────────────────── */}
           <SectionCard className="p-6">
-            <h2 className="mb-5 text-lg font-extrabold uppercase">
+            <h2 className="mb-5 flex items-center gap-2 text-lg font-extrabold uppercase">
+              <Calculator size={18} aria-hidden="true" />
               Course Information
             </h2>
 
@@ -298,17 +300,19 @@ export default function App() {
                 <button
                   onClick={save}
                   type="button"
-                  className={`flex-1 ${border} px-4 py-3 text-sm font-extrabold uppercase active:translate-y-[2px]`}
+                  className={`flex-1 ${border} flex items-center justify-center gap-2 px-4 py-3 text-sm font-extrabold uppercase active:translate-y-[2px]`}
                   style={{ background: C.lime }}
                 >
+                  <Save size={16} aria-hidden="true" />
                   {editingId ? "Update Mata Kuliah" : "Simpan Mata Kuliah"}
                 </button>
                 {editingId && (
                   <button
                     type="button"
                     onClick={cancelEdit}
-                    className={`${border} bg-white px-4 py-3 text-sm font-extrabold uppercase active:translate-y-[2px]`}
+                    className={`${border} flex items-center justify-center gap-2 bg-white px-4 py-3 text-sm font-extrabold uppercase active:translate-y-[2px]`}
                   >
+                    <X size={16} aria-hidden="true" />
                     Batal
                   </button>
                 )}
@@ -318,7 +322,8 @@ export default function App() {
 
           {/* ── Kanan: Hasil ────────────────────────────────────────── */}
           <SectionCard className="p-6">
-            <h2 className="mb-5 text-lg font-extrabold uppercase">
+            <h2 className="mb-5 flex items-center gap-2 text-lg font-extrabold uppercase">
+              <Award size={18} aria-hidden="true" />
               Grade Results
             </h2>
 
@@ -438,8 +443,9 @@ export default function App() {
                 <button
                   type="button"
                   onClick={clearAll}
-                  className={`${border} bg-white px-3 py-2 text-xs font-extrabold uppercase active:translate-y-[2px]`}
+                  className={`${border} flex items-center gap-1.5 bg-white px-3 py-2 text-xs font-extrabold uppercase active:translate-y-[2px]`}
                 >
+                  <Trash2 size={14} aria-hidden="true" />
                   Hapus Semua
                 </button>
               )}
@@ -448,60 +454,144 @@ export default function App() {
 
           {courses.length === 0 ? (
             <SectionCard className="p-8 text-center text-sm font-medium opacity-70">
-              Belum ada mata kuliah. Isi form lalu tekan “Simpan Mata Kuliah”.
+              Belum ada mata kuliah. Isi form lalu tekan &ldquo;Simpan Mata
+              Kuliah&rdquo;.
             </SectionCard>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {courses.map((c) => {
-                const uas = uasScore(c.correct, c.totalMcq);
-                const final = round2(
-                  finalScore(c.courseType, uas, c.compScore),
-                );
-                const band = resolveGrade(final, c.difficulty);
-                return (
-                  <SectionCard key={c.id} className="p-4">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-extrabold leading-tight">{c.name}</h3>
-                      <div
-                        className="grid h-10 w-10 shrink-0 place-items-center border-[2px] border-black text-lg font-extrabold"
-                        style={{ background: C.lime }}
-                      >
-                        {band.grade}
-                      </div>
-                    </div>
-                    <p className="mt-1 text-xs font-medium opacity-70">
-                      {COURSE_TYPES[c.courseType].compLabel} · {c.difficulty}
-                    </p>
-                    <div className="mt-3 space-y-1 text-xs font-bold">
-                      <div className="flex justify-between">
-                        <span className="opacity-70">Final</span>
-                        <span>{final.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="opacity-70">GPA</span>
-                        <span>{band.gpa.toFixed(1)}</span>
-                      </div>
-                    </div>
-                    <div className="mt-3 flex gap-2">
-                      <button
-                        type="button"
-                        onClick={() => edit(c)}
-                        className="flex-1 border-[2px] border-black bg-white py-1.5 text-xs font-extrabold uppercase active:translate-y-[2px]"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => removeCourse(c.id)}
-                        className="flex-1 border-[2px] border-black py-1.5 text-xs font-extrabold uppercase active:translate-y-[2px]"
-                        style={{ background: C.orange }}
-                      >
-                        Hapus
-                      </button>
-                    </div>
-                  </SectionCard>
-                );
-              })}
+            <div className="overflow-x-auto">
+              <table className={`w-full ${border} border-collapse`}>
+                <thead>
+                  <tr style={{ background: C.lime }}>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-left text-xs font-extrabold uppercase`}
+                    >
+                      Nama Mata Kuliah
+                    </th>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-left text-xs font-extrabold uppercase`}
+                    >
+                      Tipe
+                    </th>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-right text-xs font-extrabold uppercase`}
+                    >
+                      Nilai UAS
+                    </th>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-right text-xs font-extrabold uppercase`}
+                    >
+                      Nilai Komponen
+                    </th>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-right text-xs font-extrabold uppercase`}
+                    >
+                      Final
+                    </th>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-center text-xs font-extrabold uppercase`}
+                    >
+                      Grade
+                    </th>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-right text-xs font-extrabold uppercase`}
+                    >
+                      GPA
+                    </th>
+                    <th
+                      scope="col"
+                      className={`${border} px-3 py-2.5 text-center text-xs font-extrabold uppercase`}
+                    >
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {courses.map((c) => {
+                    const uas = uasScore(c.correct, c.totalMcq);
+                    const final = round2(
+                      finalScore(c.courseType, uas, c.compScore),
+                    );
+                    const band = resolveGrade(final, c.difficulty);
+                    const typeCfg = COURSE_TYPES[c.courseType];
+                    return (
+                      <tr key={c.id} className="bg-white">
+                        <td className={`${border} px-3 py-2.5`}>
+                          <span className="text-sm font-extrabold">
+                            {c.name}
+                          </span>
+                        </td>
+                        <td className={`${border} px-3 py-2.5`}>
+                          <div className="text-sm font-bold">
+                            {typeCfg.compLabel}
+                          </div>
+                          <div className="text-xs font-medium opacity-60">
+                            {c.difficulty}
+                          </div>
+                        </td>
+                        <td
+                          className={`${border} px-3 py-2.5 text-right text-sm font-bold tabular-nums`}
+                        >
+                          {round2(uas).toFixed(2)}
+                        </td>
+                        <td
+                          className={`${border} px-3 py-2.5 text-right text-sm font-bold tabular-nums`}
+                        >
+                          <div className="text-xs font-medium opacity-60">
+                            {typeCfg.compLabel}
+                          </div>
+                          {c.compScore.toFixed(2)}
+                        </td>
+                        <td
+                          className={`${border} px-3 py-2.5 text-right text-sm font-bold tabular-nums`}
+                        >
+                          {final.toFixed(2)}
+                        </td>
+                        <td className={`${border} px-3 py-2.5 text-center`}>
+                          <span
+                            className="inline-block border-[2px] border-black px-2.5 py-1 text-sm font-extrabold"
+                            style={{ background: C.lime }}
+                          >
+                            {band.grade}
+                          </span>
+                        </td>
+                        <td
+                          className={`${border} px-3 py-2.5 text-right text-sm font-bold tabular-nums`}
+                        >
+                          {band.gpa.toFixed(1)}
+                        </td>
+                        <td className={`${border} px-3 py-2.5`}>
+                          <div className="flex gap-1.5 justify-center">
+                            <button
+                              type="button"
+                              onClick={() => edit(c)}
+                              className="border-[2px] border-black bg-white px-2 py-1.5 active:translate-y-[2px]"
+                              aria-label={`Edit ${c.name}`}
+                            >
+                              <Pencil size={14} aria-hidden="true" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => removeCourse(c.id)}
+                              className="border-[2px] border-black px-2 py-1.5 active:translate-y-[2px]"
+                              style={{ background: C.orange }}
+                              aria-label={`Hapus ${c.name}`}
+                            >
+                              <Trash2 size={14} aria-hidden="true" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
         </section>
